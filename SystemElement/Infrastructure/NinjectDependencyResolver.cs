@@ -31,6 +31,7 @@ namespace SystemElement.Infrastructure
         private void AddBindings()
         {
             kernel.Bind<IElementRepository>().To<ElementRepository>();
+            //kernel.Bind<IMyService>().To<UrlConstraint>().WithConstructorArgument("testEmail", testEmail);
         }
     }
 }

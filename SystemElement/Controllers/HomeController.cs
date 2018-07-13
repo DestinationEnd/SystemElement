@@ -17,13 +17,13 @@ namespace SystemElement.Controllers
         public HomeController(IElementRepository repository)
         {
             elementRepository = repository;
-            repository.TruncateElements();
         }
         [HttpGet]
         public ActionResult Index(string permalink = null)
         {
             if (permalink == null)
             {
+                elementRepository.TruncateElements();
                 IEnumerable<string> listDirectories = new List<string>();
                 readRootFolder();
 
@@ -38,6 +38,7 @@ namespace SystemElement.Controllers
 
             if (permalink != null)
             {
+                permalink = @"\" + permalink;
                 parentElement = elementRepository.findParentElementByPermalink(permalink);
             }
             else
@@ -66,15 +67,24 @@ namespace SystemElement.Controllers
         private void readRootFolder()
         {
             path = ".\\root";
-            Element parentElement = makeElement(null, path);
-            ProcessDirectory(parentElement.Id, path);
+
+            string path2 = Server.MapPath(path);
+            string some = Path.GetDirectoryName(path2);
+            string words = path2.Substring(some.Length);
+
+
+            Element parentElement = makeElement(null, words);
+            ProcessDirectory(parentElement.Id, path2);
         }
         private void ProcessDirectory(int parentId, string rootDirectory)
         {
-            IEnumerable<string> listDirectories = Directory.EnumerateDirectories(rootDirectory);
+            string some = Path.GetDirectoryName(rootDirectory);
+
+            List<string> listDirectories = Directory.EnumerateDirectories(rootDirectory).ToList();
             foreach (String element in listDirectories)
             {
-                Element temp = makeElement(parentId, element);
+                string words = element.Substring(rootDirectory.Length);
+                Element temp = makeElement(parentId, words);
                 ProcessDirectory(temp.Id, element);
             }
         }
@@ -83,8 +93,12 @@ namespace SystemElement.Controllers
             Element element = new Element();
             element.Url = currentDirectory;
             element.ParentId = parentId;
-            element.Id = elementRepository.StoreElement(element);
-            return element;
+            return elementRepository.StoreElement(element);
+        }
+
+        private void UpdateStringServer(string path)
+        {
+
         }
     }
 }

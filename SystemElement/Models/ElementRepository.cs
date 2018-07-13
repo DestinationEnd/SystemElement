@@ -15,27 +15,29 @@ namespace SystemElement.Models
         }
         public Element findNullParentId()
         {
-            throw new NotImplementedException();
+            return dBContext.Elements.Where(m => m.ParentId == null).FirstOrDefault();
         }
 
         public Element findParentElementByPermalink(string permalink)
         {
-            throw new NotImplementedException();
+            return dBContext.Elements.Where(m => m.Url == permalink).FirstOrDefault();
         }
 
         public IEnumerable<Element> findParentId(int parentID)
         {
-            throw new NotImplementedException();
+            return dBContext.Elements.Where(m => m.ParentId == parentID).ToList();
         }
 
-        public int StoreElement(Element element)
+        public Element StoreElement(Element element)
         {
-            throw new NotImplementedException();
+            dBContext.Elements.Add(element);
+            dBContext.SaveChanges();
+            return element;
         }
 
         public void TruncateElements()
         {
-            throw new NotImplementedException();
+            dBContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [dbo].[Elements]");
         }
     }
 }
