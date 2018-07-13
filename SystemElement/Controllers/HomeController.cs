@@ -1,6 +1,7 @@
 ﻿using Ninject;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -24,14 +25,7 @@ namespace SystemElement.Controllers
             if (permalink == null)
             {
                 elementRepository.TruncateElements();
-                IEnumerable<string> listDirectories = new List<string>();
                 readRootFolder();
-
-                if (listDirectories.Count() > 0)
-                {
-                    ViewBag.listDirectories = listDirectories;
-                    return View("~/Views/ShoDir/showDirs.cshtml");
-                }
             }
 
             Element parentElement = null;
@@ -66,7 +60,7 @@ namespace SystemElement.Controllers
 
         private void readRootFolder()
         {
-            path = ".\\root";
+            path = ConfigurationManager.AppSettings["RootPath"];
 
             string path2 = Server.MapPath(path);
             string some = Path.GetDirectoryName(path2);
@@ -94,11 +88,6 @@ namespace SystemElement.Controllers
             element.Url = currentDirectory;
             element.ParentId = parentId;
             return elementRepository.StoreElement(element);
-        }
-
-        private void UpdateStringServer(string path)
-        {
-
         }
     }
 }

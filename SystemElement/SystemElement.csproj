@@ -164,6 +164,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\ElementRepository.cs" />
     <Compile Include="Models\IElementRepository.cs" />
     <Compile Include="Models\UrlConstraint.cs" />
